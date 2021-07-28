@@ -1,5 +1,4 @@
-const shelljs = require("shelljs");
-const { dummyShellJs, failingShellJs } = require("dummy-shells");
+const { dummyShellJs } = require("dummy-shells");
 const pr = require("./pr");
 
 const branch = "foo-branch";
