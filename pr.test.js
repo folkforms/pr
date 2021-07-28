@@ -3,7 +3,7 @@ const { dummyShellJs, failingShellJs } = require("dummy-shells");
 const pr = require("./pr");
 
 const branch = "foo-branch";
-const repoUrl = "https://github.com:folkforms/pr";
+const repoUrl = "https://github.com/folkforms/pr";
 
 beforeEach(() => {
   dummyShellJs._clear();

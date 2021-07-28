@@ -11,5 +11,6 @@ program.parse(process.argv);
 
 const option = program.opts().done ? "done" : "start";
 const branch = gitUtils.getBranch();
+const repoUrl = gitUtils.getRepoUrl();
 
-return pr(shelljs, option, branch);
+return pr(shelljs, option, branch, repoUrl);
