@@ -25,7 +25,7 @@ test("when we call 'pr' with 'done' argument it executes the correct commands", 
   expect(dummyShellJs.execList).toContain("git log --oneline --graph --decorate --all -10");
 });
 
-test("when we call 'pr' with 'start' argument on the main branch it fails", () => {
+test("when we call 'pr' on the main branch it fails", () => {
   const exitCode = pr(dummyShellJs, "start", "main");
   expect(exitCode).toEqual(1);
   expect(dummyShellJs.echoList).toContain("ERROR: Cannot create a PR on branch 'main'.");
