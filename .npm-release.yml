@@ -5,3 +5,4 @@
 - npm version patch
 - npm publish --access=public
 - yarn install
+- git push
