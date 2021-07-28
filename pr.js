@@ -2,9 +2,16 @@ const pr = (shell, gitUtils, option) => {
 
   const branch = gitUtils.getBranch();
   const repoUrl = gitUtils.getRepoUrl();
+  const commitHashForBranch = gitUtils.getCommitForBranch("branch");
+  const commitHashForMain = gitUtils.getCommitForBranch("main");
 
   if(branch === "main" || branch === "master" || branch === "develop") {
     shell.echo(`ERROR: Cannot create a PR on branch '${branch}'.`);
+    return 1;
+  }
+
+  if(commitHashForBranch === commitHashForMain) {
+    shell.echo(`ERROR: No commits on branch '${branch}'.`);
     return 1;
   }
 

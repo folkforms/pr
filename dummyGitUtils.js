@@ -2,7 +2,7 @@ const gitUtils = {
   getBranch: () => "dummy-branch",
   getRemoteUrl: () => "dummy-remote-url",
   getRepoUrl: () => "dummy-repo-url",
-  getCommitForBranch: branch => "abcdef1",
+  getCommitForBranch: branch => branch === "main" ? "1aabbcc" : "2ddeeff",
 }
 
 module.exports = gitUtils;

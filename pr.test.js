@@ -28,3 +28,10 @@ test("when we call 'pr' on the main branch it fails", () => {
   expect(exitCode).toEqual(1);
   expect(dummyShellJs.echoList).toContain("ERROR: Cannot create a PR on branch 'main'.");
 });
+
+test("when we call 'pr' with no commits on the personal branch it fails", () => {
+  const modGitUtils = { ...gitUtils, getCommitForBranch: branch => "abcdef1" };
+  const exitCode = pr(dummyShellJs, modGitUtils, "start");
+  expect(exitCode).toEqual(1);
+  expect(dummyShellJs.echoList).toContain(`ERROR: No commits on branch '${gitUtils.getBranch()}'.`);
+});
