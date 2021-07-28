@@ -1,10 +1,16 @@
-const pr = (shell, option, branch) => {
-  console.log(`#### pr: option = ${option}`);
-  console.log(`#### pr: branch = '${branch}'`);
+const pr = (shell, option, branch, repoUrl) => {
+  // console.log(`#### pr: option = ${option}`);
+  // console.log(`#### pr: branch = '${branch}'`);
+  // console.log(`#### pr: repoUrl = '${repoUrl}'`);
+
+  if(option === "start" && branch === "main") {
+    shell.echo("ERROR: Cannot create a PR on branch 'main'.");
+    return 1;
+  }
 
   if(option === "start") {
     shell.exec(`git push --set-upstream origin ${branch}`);
-    shell.exec(`start https://github.com/IBM/spm-ui-upgrade-helper/pull/new/${branch}`);
+    shell.exec(`start ${repoUrl}/pull/new/${branch}`);
     return 0;
   }
 
