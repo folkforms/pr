@@ -1,4 +1,7 @@
-const pr = (shell, option, branch, repoUrl) => {
+const pr = (shell, gitUtils, option) => {
+
+  const branch = gitUtils.getBranch();
+  const repoUrl = gitUtils.getRepoUrl();
 
   if(branch === "main" || branch === "master" || branch === "develop") {
     shell.echo(`ERROR: Cannot create a PR on branch '${branch}'.`);

@@ -8,7 +8,8 @@ const gitUtils = {
     let repo = this.getRemoteUrl().substring(4).replace(/:/, "/");
     repo = "https://" + repo.substring(0, repo.length - 4);
     return repo;
-  }
+  },
+  getCommitForBranch: branch => shelljs.exec(`git rev-parse --short ${branch}`).stdout,
 }
 
 module.exports = gitUtils;
