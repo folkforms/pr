@@ -19,11 +19,11 @@
   "license": "ISC",
   "devDependencies": {
     "@folkforms/line-endings": "^0.0.9",
-    "@folkforms/npm-release": "^0.0.20",
     "dummy-shells": "^0.0.4",
     "jest": "^27.0.6"
   },
   "dependencies": {
+    "@folkforms/npm-release": "^0.0.20",
     "commander": "^8.1.0"
   }
 }
