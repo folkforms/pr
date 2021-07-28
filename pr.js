@@ -3,8 +3,8 @@ const pr = (shell, option, branch, repoUrl) => {
   // console.log(`#### pr: branch = '${branch}'`);
   // console.log(`#### pr: repoUrl = '${repoUrl}'`);
 
-  if(option === "start" && branch === "main") {
-    shell.echo("ERROR: Cannot create a PR on branch 'main'.");
+  if(branch === "main" || branch === "master" || branch === "develop") {
+    shell.echo(`ERROR: Cannot create a PR on branch '${branch}'.`);
     return 1;
   }
 
