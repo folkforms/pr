@@ -3,5 +3,5 @@
 - npm whoami
 - yarn install --production --force
 - npm version patch
-- npm publish
+- npm publish --access=public
 - yarn install
