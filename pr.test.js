@@ -7,14 +7,14 @@ beforeEach(() => {
 });
 
 test("when we call 'pr' with 'start' argument it executes the correct commands", () => {
-  const exitCode = pr(dummyShellJs, gitUtils, "start");
+  const exitCode = pr("start", dummyShellJs, gitUtils);
   expect(exitCode).toEqual(0);
   expect(dummyShellJs.execList[0]).toEqual(`git push --set-upstream origin ${gitUtils.getBranch()}`);
   expect(dummyShellJs.execList[1]).toEqual(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
 });
 
 test("when we call 'pr' with 'done' argument it executes the correct commands", () => {
-  const exitCode = pr(dummyShellJs, gitUtils, "done");
+  const exitCode = pr("done", dummyShellJs, gitUtils);
   expect(exitCode).toEqual(0);
   expect(dummyShellJs.execList[0]).toEqual("git checkout main");
   expect(dummyShellJs.execList[1]).toEqual("git pull --prune");
@@ -24,14 +24,14 @@ test("when we call 'pr' with 'done' argument it executes the correct commands", 
 
 test("when we call 'pr' on the main branch it fails", () => {
   const modGitUtils = { ...gitUtils, getBranch: () => "main" };
-  const exitCode = pr(dummyShellJs, modGitUtils, "start");
+  const exitCode = pr("start", dummyShellJs, modGitUtils);
   expect(exitCode).toEqual(1);
   expect(dummyShellJs.echoList[0]).toEqual("ERROR: Cannot create a PR on branch 'main'.");
 });
 
 test("when we call 'pr' with no commits on the personal branch it fails", () => {
   const modGitUtils = { ...gitUtils, getCommitForBranch: branch => "abcdef1" };
-  const exitCode = pr(dummyShellJs, modGitUtils, "start");
+  const exitCode = pr("start", dummyShellJs, modGitUtils);
   expect(exitCode).toEqual(1);
   expect(dummyShellJs.echoList[0]).toEqual(`ERROR: No commits on branch '${gitUtils.getBranch()}'.`);
 });

@@ -7,10 +7,8 @@ const { Command } = require('commander');
 const program = new Command();
 
 program.option('-d, --done', 'Finish PR workflow');
-program.parse(process.argv);
+program.parse();
 
 const option = program.opts().done ? "done" : "start";
-const branch = gitUtils.getBranch();
-const repoUrl = gitUtils.getRepoUrl();
 
-return pr(shelljs, option, branch, repoUrl);
+return pr(option, shelljs, gitUtils);

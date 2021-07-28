@@ -1,4 +1,4 @@
-const pr = (shell, gitUtils, option) => {
+const pr = (option, shell, gitUtils) => {
 
   const branch = gitUtils.getBranch();
   const repoUrl = gitUtils.getRepoUrl();
