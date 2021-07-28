@@ -1,0 +1,7 @@
+- yarn test
+- yarn line-endings
+- npm whoami
+- yarn install --production --force
+- npm version patch
+- npm publish
+- yarn install

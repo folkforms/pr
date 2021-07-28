@@ -1,0 +1,29 @@
+{
+  "name": "pr",
+  "version": "0.0.0",
+  "description": "PR workflow. Creates a PR, or switches back to main and pulls and prunes.",
+  "main": "pr.js",
+  "bin": {
+    "pr": "./cli.js"
+  },
+  "scripts": {
+    "pr": "node cli.js",
+    "release": "npm-release",
+    "test": "jest"
+  },
+  "author": "folkforms",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/folkforms/pr"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@folkforms/line-endings": "^0.0.9",
+    "@folkforms/npm-release": "^0.0.20",
+    "dummy-shells": "^0.0.4",
+    "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "commander": "^8.1.0"
+  }
+}
