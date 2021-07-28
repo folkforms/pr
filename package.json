@@ -23,7 +23,7 @@
     "jest": "^27.0.6"
   },
   "dependencies": {
-    "@folkforms/npm-release": "^0.0.20",
+    "@folkforms/npm-release": "^0.0.21",
     "commander": "^8.1.0"
   }
 }

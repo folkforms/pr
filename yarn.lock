@@ -331,14 +331,15 @@
     dummy-shells "^0.0.3"
     shelljs "^0.8.4"
 
-"@folkforms/npm-release@^0.0.20":
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/@folkforms/npm-release/-/npm-release-0.0.20.tgz#6d22ea64eb71bb25a92e4a8d47d644f52d669f83"
-  integrity sha512-YXOLIhuocCTFBA050KN6YKP1GoXgb2Qg0P51HwQZt2I2d5LohhpJXHRmnUva48CAOIOqoIbmuLCn5hMPUzi/KQ==
+"@folkforms/npm-release@^0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@folkforms/npm-release/-/npm-release-0.0.21.tgz#ca58b09e7262aa35c6ea2297fa1cc547f951a771"
+  integrity sha512-3877RSSW8Qced4G/K4oERsvpx4X1bKoMprjNCRA52GhUzi2BFirZMsu/MU487Q86LAuPw0rfT7XrY6Net17Vjg==
   dependencies:
     "@folkforms/file-io" "^0.2.2"
     commander "^8.0.0"
     dummy-shells "^0.0.3"
+    fs-extra "^10.0.0"
     shelljs "^0.8.4"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
