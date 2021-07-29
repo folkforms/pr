@@ -1,4 +1,4 @@
-const pr = (option, shell, gitUtils) => {
+const prx = (option, shell, gitUtils) => {
 
   const branch = gitUtils.getBranch();
   const repoUrl = gitUtils.getRepoUrl();
@@ -33,4 +33,4 @@ const pr = (option, shell, gitUtils) => {
   return 1;
 }
 
-module.exports = pr;
+module.exports = prx;
