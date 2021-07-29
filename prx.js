@@ -2,7 +2,7 @@ const prx = (option, shell, gitUtils) => {
 
   const branch = gitUtils.getBranch();
   const repoUrl = gitUtils.getRepoUrl();
-  const commitHashForBranch = gitUtils.getCommitForBranch("branch");
+  const commitHashForBranch = gitUtils.getCommitForBranch(branch);
   const commitHashForMain = gitUtils.getCommitForBranch("main");
 
   if(branch === "main" || branch === "master" || branch === "develop") {
