@@ -33,5 +33,5 @@ test("when we call 'prx' with no commits on the personal branch it fails", () =>
   const modGitUtils = { ...gitUtils, getCommitForBranch: branch => "abcdef1" };
   const exitCode = prx("start", dummyShellJs, modGitUtils);
   expect(exitCode).toEqual(1);
-  expect(dummyShellJs.echoList[0]).toEqual(`ERROR: No commits on branch '${gitUtils.getBranch()}'.`);
+  expect(dummyShellJs.echoList[0]).toEqual(`ERROR: No commits on branch '${gitUtils.getBranch()}'. Did you forget to commit your files?`);
 });

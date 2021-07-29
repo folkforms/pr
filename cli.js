@@ -12,7 +12,6 @@ program.option('-n, --dry-run', 'Dry run');
 program.parse();
 
 const option = program.opts().done ? "done" : "start";
-
 const shell = program.opts().dryRun ? dryRunShellJs : shelljs;
 
 return prx(option, shell, gitUtils);

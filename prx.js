@@ -11,7 +11,7 @@ const prx = (option, shell, gitUtils) => {
   }
 
   if(commitHashForBranch === commitHashForMain) {
-    shell.echo(`ERROR: No commits on branch '${branch}'.`);
+    shell.echo(`ERROR: No commits on branch '${branch}'. Did you forget to commit your files?`);
     return 1;
   }
 
