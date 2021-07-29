@@ -1,8 +1,14 @@
 const shelljs = require("shelljs");
 
 const gitUtils = {
-  getBranch: () => shelljs.exec(`git symbolic-ref --short -q HEAD`).stdout,
-  getRemoteUrl: () => shelljs.exec(`git remote get-url --push origin`).stdout,
+  getBranch: () => {
+    const branch = shelljs.exec(`git symbolic-ref --short -q HEAD`).stdout;
+    return branch.substring(0, branch.length - 1);
+  },
+  getRemoteUrl: () => {
+    const url = shelljs.exec(`git remote get-url --push origin`).stdout;
+    return url.substring(0, url.length - 1);
+  },
   getRepoUrl: () => {
     // git@github.com:folkforms/pr.git => https://github.com/folkforms/pr
     let repo = gitUtils.getRemoteUrl().substring(4).replace(/:/, "/");
