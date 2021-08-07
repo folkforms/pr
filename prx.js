@@ -16,22 +16,37 @@ const prx = (option, shell, gitUtils) => {
   }
 
   if(option === "start") {
-    shell.exec(`git push --set-upstream origin ${branch}`);
-    shell.exec(`${openCmd()} ${repoUrl}/pull/new/${branch}`);
+    exec(shell, `git push --set-upstream origin ${branch}`);
+    exec(shell, `${openCmd()} ${repoUrl}/pull/new/${branch}`);
     return 0;
   }
 
   if(option === "done") {
-    shell.exec("git checkout main");
-    shell.exec("git pull --prune");
-    shell.exec(`git branch --delete ${branch}`);
-    shell.exec("git log --oneline --graph --decorate --all -10");
+    exec(shell, "git checkout main");
+    exec(shell, "git pull --prune");
+    exec(shell, `git branch --delete ${branch}`);
+    exec(shell, "git log --oneline --graph --decorate --all -10");
     return 0;
   }
 
   shell.echo(`ERROR: Unknown option: '${option}'`);
   return 1;
 }
+
+/**
+ * Executes the given command.
+ *
+ * @param {string} cmd command to execute
+ */
+const exec = (shell, cmd) => {
+  cmd = cmd.replace(/\s+/g, " ");
+  const r = shell.exec(cmd);
+  if (r.code) {
+    shell.echo(`ERROR: Could not run command: '${cmd}'.`);
+    shell.exit(1);
+  }
+  return 0;
+};
 
 const openCmd = () => {
   if(process.platform.startsWith("win")) {

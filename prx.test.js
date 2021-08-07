@@ -1,37 +1,48 @@
-const { dummyShellJs } = require("dummy-shells");
 const gitUtils = require("./dummyGitUtils");
 const prx = require("./prx");
 
+let shelljs;
 beforeEach(() => {
-  dummyShellJs._clear();
+  jest.mock("shelljs", () => {
+    return {
+      exec: jest.fn(() => ({ code: 0 })),
+      echo: jest.fn(),
+    }
+  })
+  shelljs = require("shelljs");
 });
 
+afterEach(() => {
+  jest.resetModules();
+  jest.resetAllMocks();
+})
+
 test("when we call 'prx' with 'start' argument it executes the correct commands", () => {
-  const exitCode = prx("start", dummyShellJs, gitUtils);
+  const exitCode = prx("start", shelljs, gitUtils);
   expect(exitCode).toEqual(0);
-  expect(dummyShellJs.execList[0]).toEqual(`git push --set-upstream origin ${gitUtils.getBranch()}`);
-  expect(dummyShellJs.execList[1]).toEqual(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
+  expect(shelljs.exec).toHaveBeenCalledWith(`git push --set-upstream origin ${gitUtils.getBranch()}`);
+  expect(shelljs.exec).toHaveBeenCalledWith(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
 });
 
 test("when we call 'prx' with 'done' argument it executes the correct commands", () => {
-  const exitCode = prx("done", dummyShellJs, gitUtils);
+  const exitCode = prx("done", shelljs, gitUtils);
   expect(exitCode).toEqual(0);
-  expect(dummyShellJs.execList[0]).toEqual("git checkout main");
-  expect(dummyShellJs.execList[1]).toEqual("git pull --prune");
-  expect(dummyShellJs.execList[2]).toEqual(`git branch --delete ${gitUtils.getBranch()}`);
-  expect(dummyShellJs.execList[3]).toEqual("git log --oneline --graph --decorate --all -10");
+  expect(shelljs.exec).toHaveBeenCalledWith("git checkout main");
+  expect(shelljs.exec).toHaveBeenCalledWith("git pull --prune");
+  expect(shelljs.exec).toHaveBeenCalledWith(`git branch --delete ${gitUtils.getBranch()}`);
+  expect(shelljs.exec).toHaveBeenCalledWith("git log --oneline --graph --decorate --all -10");
 });
 
 test("when we call 'prx' on the main branch it fails", () => {
   const modGitUtils = { ...gitUtils, getBranch: () => "main" };
-  const exitCode = prx("start", dummyShellJs, modGitUtils);
+  const exitCode = prx("start", shelljs, modGitUtils);
   expect(exitCode).toEqual(1);
-  expect(dummyShellJs.echoList[0]).toEqual("ERROR: Cannot create a PR on branch 'main'.");
+  expect(shelljs.echo).toHaveBeenCalledWith("ERROR: Cannot create a PR on branch 'main'.");
 });
 
 test("when we call 'prx' with no commits on the personal branch it fails", () => {
   const modGitUtils = { ...gitUtils, getCommitForBranch: branch => "abcdef1" };
-  const exitCode = prx("start", dummyShellJs, modGitUtils);
+  const exitCode = prx("start", shelljs, modGitUtils);
   expect(exitCode).toEqual(1);
-  expect(dummyShellJs.echoList[0]).toEqual(`ERROR: No commits on branch '${gitUtils.getBranch()}'. Did you forget to commit your files?`);
+  expect(shelljs.echo).toHaveBeenCalledWith(`ERROR: No commits on branch '${gitUtils.getBranch()}'. Did you forget to commit your files?`);
 });
