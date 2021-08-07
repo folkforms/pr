@@ -17,7 +17,7 @@ const prx = (option, shell, gitUtils) => {
 
   if(option === "start") {
     shell.exec(`git push --set-upstream origin ${branch}`);
-    shell.exec(`start ${repoUrl}/pull/new/${branch}`);
+    shell.exec(`${openCmd()} ${repoUrl}/pull/new/${branch}`);
     return 0;
   }
 
@@ -31,6 +31,16 @@ const prx = (option, shell, gitUtils) => {
 
   shell.echo(`ERROR: Unknown option: '${option}'`);
   return 1;
+}
+
+const openCmd = () => {
+  if(process.platform.startsWith("win")) {
+    return "start";
+  } else if(process.platform.startsWith("darwin")) {
+    return "open";
+  } else {
+    return "xdg-open";
+  }
 }
 
 module.exports = prx;
