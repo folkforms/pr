@@ -33,6 +33,17 @@ test("when we call 'prx' with 'done' argument it executes the correct commands",
   expect(shelljs.exec).toHaveBeenCalledWith("git log --oneline --graph --decorate --all -10");
 });
 
+test("when we call 'prx' with 'doneDelete' argument it executes the correct commands", () => {
+  const exitCode = prx("doneDelete", shelljs, gitUtils);
+  const branch = gitUtils.getBranch();
+  expect(exitCode).toEqual(0);
+  expect(shelljs.exec).toHaveBeenCalledWith("git checkout main");
+  expect(shelljs.exec).toHaveBeenCalledWith(`git push --delete origin ${branch}`);
+  expect(shelljs.exec).toHaveBeenCalledWith("git pull --prune");
+  expect(shelljs.exec).toHaveBeenCalledWith(`git branch --delete ${branch}`);
+  expect(shelljs.exec).toHaveBeenCalledWith("git log --oneline --graph --decorate --all -10");
+});
+
 test("when we call 'prx' on the main branch it fails", () => {
   const modGitUtils = { ...gitUtils, getBranch: () => "main" };
   const exitCode = prx("start", shelljs, modGitUtils);

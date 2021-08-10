@@ -8,10 +8,13 @@ const { Command } = require('commander');
 
 const program = new Command();
 program.option('-d, --done', 'Finish PR workflow');
+program.option('-dd, --done-delete', 'Finish PR workflow and delete remote branch');
 program.option('-n, --dry-run', 'Dry run');
 program.parse();
 
-const option = program.opts().done ? "done" : "start";
+let option = "start";
+if(program.opts().done) { option = "done"; }
+if(program.opts().doneDelete) { option = "doneDelete"; }
 const shell = program.opts().dryRun ? dryRunShellJs : shelljs;
 
 return prx(option, shell, gitUtils);

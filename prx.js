@@ -29,6 +29,15 @@ const prx = (option, shell, gitUtils) => {
     return 0;
   }
 
+  if(option === "doneDelete") {
+    exec(shell, "git checkout main");
+    exec(shell, `git push --delete origin ${branch}`);
+    exec(shell, "git pull --prune");
+    exec(shell, `git branch --delete ${branch}`);
+    exec(shell, "git log --oneline --graph --decorate --all -10");
+    return 0;
+  }
+
   shell.echo(`ERROR: Unknown option: '${option}'`);
   return 1;
 }
