@@ -1,7 +1,10 @@
 const gitUtils = require("./dummyGitUtils");
+const prxTasksLib = require("./prxTasks");
 const prx = require("./prx");
 
 let shelljs;
+let prxTasks;
+let prxTasksOriginal;
 beforeEach(() => {
   jest.mock("shelljs", () => {
     return {
@@ -10,50 +13,69 @@ beforeEach(() => {
     }
   })
   shelljs = require("shelljs");
+
+  // FIXME Can we jest.mock this?
+  prxTasks = prxTasksLib(shelljs, gitUtils);
+  prxTasks.checkBranchIsNotMain = jest.fn(() => 0);
+  prxTasks.pushBranch = jest.fn();
+  prxTasks.createPR = jest.fn();
+  prxTasks.pullLatest = jest.fn();
+  prxTasks.deleteRemoteBranch = jest.fn();
+  prxTasks.deleteLocalBranch = jest.fn();
+  prxTasks.printLog = jest.fn();
+
+  prxTasksOriginal = prxTasksLib(shelljs, gitUtils);
 });
 
 afterEach(() => {
   jest.resetModules();
   jest.resetAllMocks();
-})
+});
 
 test("when we call 'prx' with 'start' argument it executes the correct commands", () => {
-  const exitCode = prx("start", shelljs, gitUtils);
+  const exitCode = prx("start", shelljs, prxTasks);
+
+  expect(prxTasks.pushBranch).toHaveBeenCalled();
+  expect(prxTasks.createPR).toHaveBeenCalled();
   expect(exitCode).toEqual(0);
-  expect(shelljs.exec).toHaveBeenCalledWith(`git push --set-upstream origin ${gitUtils.getBranch()}`);
-  expect(shelljs.exec).toHaveBeenCalledWith(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
 });
 
 test("when we call 'prx' with 'done' argument it executes the correct commands", () => {
-  const exitCode = prx("done", shelljs, gitUtils);
+  const exitCode = prx("done", shelljs, prxTasks);
+
+  expect(prxTasks.pullLatest).toHaveBeenCalled();
+  expect(prxTasks.deleteLocalBranch).toHaveBeenCalled();
+  expect(prxTasks.printLog).toHaveBeenCalled();
   expect(exitCode).toEqual(0);
-  expect(shelljs.exec).toHaveBeenCalledWith("git checkout main");
-  expect(shelljs.exec).toHaveBeenCalledWith("git pull --prune");
-  expect(shelljs.exec).toHaveBeenCalledWith(`git branch --delete ${gitUtils.getBranch()}`);
-  expect(shelljs.exec).toHaveBeenCalledWith("git log --oneline --graph --decorate --all -10");
 });
 
 test("when we call 'prx' with 'doneDelete' argument it executes the correct commands", () => {
-  const exitCode = prx("doneDelete", shelljs, gitUtils);
-  const branch = gitUtils.getBranch();
+  const exitCode = prx("doneDelete", shelljs, prxTasks);
+
+  expect(prxTasks.deleteRemoteBranch).toHaveBeenCalled();
+  expect(prxTasks.pullLatest).toHaveBeenCalled();
+  expect(prxTasks.deleteLocalBranch).toHaveBeenCalled();
+  expect(prxTasks.printLog).toHaveBeenCalled();
   expect(exitCode).toEqual(0);
-  expect(shelljs.exec).toHaveBeenCalledWith("git checkout main");
-  expect(shelljs.exec).toHaveBeenCalledWith(`git push --delete origin ${branch}`);
-  expect(shelljs.exec).toHaveBeenCalledWith("git pull --prune");
-  expect(shelljs.exec).toHaveBeenCalledWith(`git branch --delete ${branch}`);
-  expect(shelljs.exec).toHaveBeenCalledWith("git log --oneline --graph --decorate --all -10");
 });
 
 test("when we call 'prx' on the main branch it fails", () => {
-  const modGitUtils = { ...gitUtils, getBranch: () => "main" };
-  const exitCode = prx("start", shelljs, modGitUtils);
-  expect(exitCode).toEqual(1);
+  gitUtils.getBranch = () => "main";
+  prxTasks.checkBranchIsNotMain = prxTasksOriginal.checkBranchIsNotMain;
+
+  const exitCode = prx("start", shelljs, prxTasks);
+
   expect(shelljs.echo).toHaveBeenCalledWith("ERROR: Cannot create a PR on branch 'main'.");
+  expect(exitCode).toEqual(1);
 });
 
 test("when we call 'prx' with no commits on the personal branch it fails", () => {
-  const modGitUtils = { ...gitUtils, getCommitForBranch: branch => "abcdef1" };
-  const exitCode = prx("start", shelljs, modGitUtils);
+  gitUtils.getBranch = () => "dummy-branch";
+  gitUtils.getCommitForBranch = () => "abcdef1";
+  prxTasks.checkBranchHasCommits = prxTasksOriginal.checkBranchHasCommits;
+
+  const exitCode = prx("start", shelljs, prxTasks);
+
+  expect(shelljs.echo).toHaveBeenCalledWith(`ERROR: No commits on branch 'dummy-branch'. Did you forget to commit your files?`);
   expect(exitCode).toEqual(1);
-  expect(shelljs.echo).toHaveBeenCalledWith(`ERROR: No commits on branch '${gitUtils.getBranch()}'. Did you forget to commit your files?`);
 });
