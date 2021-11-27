@@ -4,6 +4,7 @@ const gitUtils = {
     gitUtils.getRemoteUrl = () => "dummy-remote-url";
     gitUtils.getRepoUrl = () => "dummy-repo-url";
     gitUtils.getCommitForBranch = branch => branch === "main" ? "1aabbcc" : "2ddeeff";
+    gitUtils.getMainBranchName = () => "main";
   }
 }
 

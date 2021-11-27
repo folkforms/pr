@@ -2,7 +2,7 @@ const prxTasks = (shell, gitUtils) => {
   return {
     checkBranchIsNotMain: () => {
       const branch = gitUtils.getBranch();
-      if(branch === "main" || branch === "master" || branch === "develop") {
+      if(branch === gitUtils.getMainBranchName()) {
         shell.echo(`ERROR: Cannot create a PR on branch '${branch}'.`);
         return 1;
       }
@@ -11,7 +11,7 @@ const prxTasks = (shell, gitUtils) => {
     checkBranchHasCommits: () => {
       const branch = gitUtils.getBranch();
       const commitHashForBranch = gitUtils.getCommitForBranch(branch);
-      const commitHashForMain = gitUtils.getCommitForBranch("main"); // FIXME Should get main branch name in case "master" or "develop"
+      const commitHashForMain = gitUtils.getCommitForBranch(gitUtils.getMainBranchName());
       if(commitHashForBranch === commitHashForMain) {
         shell.echo(`ERROR: No commits on branch '${branch}'. Did you forget to commit your files?`);
         return 1;
@@ -28,7 +28,7 @@ const prxTasks = (shell, gitUtils) => {
       return exec(shell, `${openCmd()} ${repoUrl}/pull/new/${branch}`);
     },
     pullLatest: () => {
-      const r = exec(shell, "git checkout main");
+      const r = exec(shell, `git checkout ${gitUtils.getMainBranchName()}`);
       if(r.code !== 0) {
         return r;
       }
