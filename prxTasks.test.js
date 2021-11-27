@@ -17,26 +17,29 @@ beforeEach(() => {
 afterEach(() => {
   jest.resetModules();
   jest.resetAllMocks();
+  gitUtils._reset();
 })
 
-test("FIXME prxTasks.checkBranchIsNotMain", () => {
+test("prxTasks.checkBranchIsNotMain returns 0 for non-main branch", () => {
+  gitUtils.getBranch = () => 'not-main';
   const exitCode = prxTasks.checkBranchIsNotMain();
   expect(exitCode).toEqual(0);
 });
 
-// FIXME Negative test of the above
+test("prxTasks.checkBranchIsNotMain returns 1 for main branch", () => {
+  gitUtils.getBranch = () => 'main';
+  const exitCode = prxTasks.checkBranchIsNotMain();
+  expect(exitCode).toEqual(1);
+});
 
-test("FIXME prxTasks.pushBranch", () => {
+test("prxTasks.pushBranch calls git push with the correct arguments", () => {
   const exitCode = prxTasks.pushBranch();
   expect(exitCode).toEqual(0);
   expect(shelljs.exec).toHaveBeenCalledWith(`git push --set-upstream origin ${gitUtils.getBranch()}`);
-  // expect(shelljs.exec).toHaveBeenCalledWith(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
 });
 
-test("FIXME prxTasks.createPR", () => {
+test("prxTasks.createPR calls start with the correct url", () => {
   const exitCode = prxTasks.createPR();
   expect(exitCode).toEqual(0);
   expect(shelljs.exec).toHaveBeenCalledWith(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
 });
-
-// FIXME More tests...
