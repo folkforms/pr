@@ -23,8 +23,8 @@ const prxTasks = prxTasksLib(shell, gitUtils);
 if(program.opts().testMode) {
   console.log(`TEST MODE: option: ${option}`);
   console.log(`TEST MODE: dry run shell: ${!!program.opts().dryRun}`);
-  process.exitCode = 0;
+  process.exit(0);
 } else {
   const r = prx(option, shell, prxTasks);
-  process.exitCode = r;
+  process.exit(r);
 }
