@@ -23,6 +23,7 @@ beforeEach(() => {
   prxTasks.deleteRemoteBranch = jest.fn();
   prxTasks.deleteLocalBranch = jest.fn();
   prxTasks.printLog = jest.fn();
+  prxTasks.checkLengthOfBranchName = jest.fn(() => ({ code: 0, length: 20 }));
 
   prxTasksOriginal = prxTasksLib(shelljs, gitUtils);
 });
@@ -78,4 +79,9 @@ test("when we call 'prx' with no commits on the personal branch it fails", () =>
 
   expect(shelljs.echo).toHaveBeenCalledWith(`ERROR: No commits on branch 'dummy-branch'. Did you forget to commit your files?`);
   expect(exitCode).toEqual(1);
+});
+
+test("when we call 'prx' with 'check-length-of-branch-name' argument it executes the correct commands", () => {
+  prx("check-length-of-branch-name", shelljs, prxTasks);
+  expect(prxTasks.checkLengthOfBranchName).toHaveBeenCalled();
 });

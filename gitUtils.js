@@ -17,6 +17,7 @@ const gitUtils = {
   },
   getCommitForBranch: branch => shelljs.exec(`git rev-parse --short ${branch}`).stdout,
   getMainBranchName: () => shelljs.exec(`git remote show origin | sed -n '/HEAD branch/s/.*: //p'`).stdout,
+  getRemoteName: () => shelljs.exec(`git remote show origin | sed -n '/Push  URL/s/.*: //p'`).stdout,
 }
 
 module.exports = gitUtils;

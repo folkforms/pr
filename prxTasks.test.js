@@ -43,3 +43,8 @@ test("prxTasks.createPR calls start with the correct url", () => {
   expect(exitCode).toEqual(0);
   expect(shelljs.exec).toHaveBeenCalledWith(`start ${gitUtils.getRepoUrl()}/pull/new/${gitUtils.getBranch()}`);
 });
+
+test("prxTasks.checkLengthOfBranchName calls git branch with the correct arguments", () => {
+  const r = prxTasks.checkLengthOfBranchName();
+  expect(r).toEqual({ code: 0, length: gitUtils.getBranch().length });
+});

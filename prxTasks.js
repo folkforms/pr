@@ -44,6 +44,13 @@ const prxTasks = (shell, gitUtils) => {
     },
     printLog: () => {
       return exec(shell, "git log --oneline --graph --decorate --all -10");
+    },
+    checkLengthOfBranchName: () => {
+      const branch = gitUtils.getBranch();
+      return {
+        length: branch.length,
+        code: branch.length > 48 ? 1 : 0
+      };
     }
   }
 }

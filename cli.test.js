@@ -47,3 +47,12 @@ test('cli with -dd option', done => {
   ];
   testCli(testCmd, expectedStdOut, done);
 });
+
+test('cli with -c option', done => {
+  const testCmd = [ "cli.js", "-c", "--test-mode" ];
+  const expectedStdOut = [
+    "TEST MODE: option: check-length-of-branch-name",
+    "TEST MODE: dry run shell: false",
+  ];
+  testCli(testCmd, expectedStdOut, done);
+});

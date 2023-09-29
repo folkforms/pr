@@ -5,6 +5,7 @@ const gitUtils = {
     gitUtils.getRepoUrl = () => "dummy-repo-url";
     gitUtils.getCommitForBranch = branch => branch === "main" ? "1aabbcc" : "2ddeeff";
     gitUtils.getMainBranchName = () => "main";
+    gitUtils.getRemoteName = () => "git@github.com:folkforms/prx.git";
   }
 }
 
