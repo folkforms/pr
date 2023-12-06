@@ -8,7 +8,7 @@ const { dryRunShellJs } = require("dummy-shells");
 const { Command, Option } = require('commander');
 
 const program = new Command();
-program.option('-c, --check-branch', 'Check length of branch name');
+program.option('-c, --check-branch', 'Check branch name');
 program.option('-d, --done', 'Finish PR workflow');
 program.option('-dd, --done-delete', 'Finish PR workflow and delete remote branch');
 program.option('-n, --dry-run', 'Dry run');
@@ -16,7 +16,7 @@ program.addOption(new Option('--test-mode').hideHelp())
 program.parse();
 
 let option = "start";
-if(program.opts().checkBranch) { option = "check-length-of-branch-name"; }
+if(program.opts().checkBranch) { option = "check-branch-name"; }
 if(program.opts().done) { option = "done"; }
 if(program.opts().doneDelete) { option = "doneDelete"; }
 const shell = program.opts().dryRun ? dryRunShellJs : shelljs;

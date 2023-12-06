@@ -48,3 +48,13 @@ test("prxTasks.checkLengthOfBranchName calls git branch with the correct argumen
   const r = prxTasks.checkLengthOfBranchName();
   expect(r).toEqual({ code: 0, length: gitUtils.getBranch().length });
 });
+
+test("prxTasks.checkBranchNameStartsWithCorrectPrefix calls git branch with the correct arguments", () => {
+  gitUtils.getBranch = () => "ots-1234/dummy-branch";
+  const r = prxTasks.checkBranchNameStartsWithCorrectPrefix();
+  expect(r).toEqual({ code: 0 });
+
+  gitUtils.getBranch = () => "dummy-branch";
+  const r2 = prxTasks.checkBranchNameStartsWithCorrectPrefix();
+  expect(r2).toEqual({ code: 1 });
+});

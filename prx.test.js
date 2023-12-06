@@ -24,6 +24,7 @@ beforeEach(() => {
   prxTasks.deleteLocalBranch = jest.fn();
   prxTasks.printLog = jest.fn();
   prxTasks.checkLengthOfBranchName = jest.fn(() => ({ code: 0, length: 20 }));
+  prxTasks.checkBranchNameStartsWithCorrectPrefix = jest.fn(() => ({ code: 0 }));
 
   prxTasksOriginal = prxTasksLib(shelljs, gitUtils);
 });
@@ -81,7 +82,8 @@ test("when we call 'prx' with no commits on the personal branch it fails", () =>
   expect(exitCode).toEqual(1);
 });
 
-test("when we call 'prx' with 'check-length-of-branch-name' argument it executes the correct commands", () => {
-  prx("check-length-of-branch-name", shelljs, prxTasks);
+test("when we call 'prx' with 'check-branch-name' argument it executes the correct commands", () => {
+  prx("check-branch-name", shelljs, prxTasks);
   expect(prxTasks.checkLengthOfBranchName).toHaveBeenCalled();
+  expect(prxTasks.checkBranchNameStartsWithCorrectPrefix).toHaveBeenCalled();
 });

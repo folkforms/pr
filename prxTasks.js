@@ -51,6 +51,12 @@ const prxTasks = (shell, gitUtils) => {
         length: branch.length,
         code: branch.length > 48 ? 1 : 0
       };
+    },
+    checkBranchNameStartsWithCorrectPrefix: () => {
+      const branch = gitUtils.getBranch();
+      return {
+        code: !!branch.match(/^ots-\d{1,}.*$/) ? 0 : 1
+      };
     }
   }
 }

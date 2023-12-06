@@ -1,14 +1,27 @@
 const prx = (option, shell, prxTasks) => {
 
-  if(option === "check-length-of-branch-name") {
-    const r = prxTasks.checkLengthOfBranchName();
+  if(option === "check-branch-name") {
+    let foundError = false;
+
+    let r = prxTasks.checkLengthOfBranchName();
     if (r.code === 1) {
       console.error("");
       console.error(`Branch name is too long (${r.length}/40 characters)`);
-    } else {
+      foundError = true;
+    }
+
+    r = prxTasks.checkBranchNameStartsWithCorrectPrefix();
+    if (r.code === 1) {
+      console.error("");
+      console.error(`Branch name does not start with 'ots-1234/'`);
+      foundError = true;
+    }
+
+    if (!foundError) {
       console.log("");
       console.log("Branch name is ok");
     }
+
     return r;
   }
 
