@@ -24,6 +24,7 @@
   "dependencies": {
     "@folkforms/npm-release": "^0.0.21",
     "commander": "^8.1.0",
-    "dummy-shells": "^0.0.4"
+    "dummy-shells": "^0.0.4",
+    "fs-extra": "^11.2.0"
   }
 }

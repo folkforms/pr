@@ -1,6 +1,9 @@
+const fs = require('fs-extra');
+
 const prx = (option, shell, prxTasks) => {
 
   if(option === "check-branch-name") {
+
     let foundError = false;
 
     let r = prxTasks.checkLengthOfBranchName();
@@ -23,37 +26,45 @@ const prx = (option, shell, prxTasks) => {
     }
 
     return r;
-  }
 
-  let r;
-  r = prxTasks.checkBranchIsNotMain();
-  if(r !== 0) { return r; }
-  r = prxTasks.checkBranchHasCommits();
-  if(r !== 0) { return r; }
+  } else if(option === "version") {
 
-  if(option === "start") {
-    prxTasks.pushBranch();
-    prxTasks.createPR();
+    var packageDotJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+    console.log(`prx v${packageDotJson.version}`);
     return 0;
-  }
 
-  if(option === "done") {
-    prxTasks.pullLatest()
-    prxTasks.deleteLocalBranch()
-    prxTasks.printLog()
-    return 0;
-  }
+  } else {
 
-  if(option === "doneDelete") {
-    prxTasks.deleteRemoteBranch()
-    prxTasks.pullLatest()
-    prxTasks.deleteLocalBranch()
-    prxTasks.printLog()
-    return 0;
-  }
+    let r;
+    r = prxTasks.checkBranchIsNotMain();
+    if(r !== 0) { return r; }
+    r = prxTasks.checkBranchHasCommits();
+    if(r !== 0) { return r; }
 
-  shell.echo(`ERROR: Unknown option: '${option}'`);
-  return 1;
+    if(option === "start") {
+      prxTasks.pushBranch();
+      prxTasks.createPR();
+      return 0;
+    }
+
+    if(option === "done") {
+      prxTasks.pullLatest()
+      prxTasks.deleteLocalBranch()
+      prxTasks.printLog()
+      return 0;
+    }
+
+    if(option === "doneDelete") {
+      prxTasks.deleteRemoteBranch()
+      prxTasks.pullLatest()
+      prxTasks.deleteLocalBranch()
+      prxTasks.printLog()
+      return 0;
+    }
+
+    shell.echo(`ERROR: Unknown option: '${option}'`);
+    return 1;
+  }
 }
 
 module.exports = prx;
