@@ -1,6 +1,6 @@
 {
   "name": "@folkforms/prx",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "PR workflow. Creates a PR, or switches back to main and pulls and prunes.",
   "main": "pr.js",
   "bin": {
