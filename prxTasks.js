@@ -55,7 +55,7 @@ const prxTasks = (shell, gitUtils) => {
     checkBranchNameStartsWithCorrectPrefix: () => {
       const branch = gitUtils.getBranch();
       return {
-        code: !!branch.match(/^ots-\d{1,}.*$/) ? 0 : 1
+        code: !!branch.match(/^ots-\d{1,}\/.*$/) ? 0 : 1
       };
     }
   }

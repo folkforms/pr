@@ -7,25 +7,24 @@ const prx = (option, shell, prxTasks) => {
     let foundError = false;
 
     let r = prxTasks.checkLengthOfBranchName();
-    if (r.code === 1) {
-      console.error("");
-      console.error(`Branch name is too long (${r.length}/40 characters)`);
+    console.log("");
+    if (r.code === 0) {
+      console.log("Branch name is under the maximum length (success)");
+    } else {
+      console.warn(`Branch name is too long (${r.length}/40 characters) (FAILED)`);
       foundError = true;
     }
 
     r = prxTasks.checkBranchNameStartsWithCorrectPrefix();
-    if (r.code === 1) {
-      console.error("");
-      console.error(`Branch name does not start with 'ots-1234/'`);
+    console.log("");
+    if (r.code === 0) {
+      console.log("Branch name starts with correct 'ots-1234/' prefix (success)");
+    } else {
+      console.warn("Branch name does not start with 'ots-1234/' (FAILED)");
       foundError = true;
     }
 
-    if (!foundError) {
-      console.log("");
-      console.log("Branch name is ok");
-    }
-
-    return r;
+    return foundError ? 1 : 0;
 
   } else if(option === "version") {
 
