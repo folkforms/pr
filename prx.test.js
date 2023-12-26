@@ -37,6 +37,8 @@ afterEach(() => {
 test("when we call 'prx' with 'start' argument it executes the correct commands", () => {
   const exitCode = prx("start", shelljs, prxTasks);
 
+  expect(prxTasks.checkLengthOfBranchName).toHaveBeenCalled();
+  expect(prxTasks.checkBranchNameStartsWithCorrectPrefix).toHaveBeenCalled();
   expect(prxTasks.pushBranch).toHaveBeenCalled();
   expect(prxTasks.createPR).toHaveBeenCalled();
   expect(exitCode).toEqual(0);
