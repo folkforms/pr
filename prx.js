@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 
-const prx = (option, shell, prxTasks) => {
+const prx = (option, flags, shell, prxTasks) => {
 
   const checkBranchNameLength = () => {
     let r = prxTasks.checkLengthOfBranchName();
@@ -46,9 +46,11 @@ const prx = (option, shell, prxTasks) => {
     if(r !== 0) { return r; }
 
     if(option === "start") {
-      const foundError = checkBranchNameLength() || checkBranchNameStartsWithCorrectPrefix();
-      if (foundError) {
-        return 1;
+      if (!flags.includes("no-verify")) {
+        const foundError = checkBranchNameLength() || checkBranchNameStartsWithCorrectPrefix();
+        if (foundError) {
+          return 1;
+        }
       }
       prxTasks.pushBranch();
       prxTasks.createPR();

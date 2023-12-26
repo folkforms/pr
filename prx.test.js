@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 test("when we call 'prx' with 'start' argument it executes the correct commands", () => {
-  const exitCode = prx("start", shelljs, prxTasks);
+  const exitCode = prx("start", [], shelljs, prxTasks);
 
   expect(prxTasks.checkLengthOfBranchName).toHaveBeenCalled();
   expect(prxTasks.checkBranchNameStartsWithCorrectPrefix).toHaveBeenCalled();
@@ -44,8 +44,18 @@ test("when we call 'prx' with 'start' argument it executes the correct commands"
   expect(exitCode).toEqual(0);
 });
 
+test("when we call 'prx' with 'start' argument and 'no-verify' flag it executes the correct commands", () => {
+  const exitCode = prx("start", [ "no-verify" ], shelljs, prxTasks);
+
+  expect(prxTasks.checkLengthOfBranchName).not.toHaveBeenCalled();
+  expect(prxTasks.checkBranchNameStartsWithCorrectPrefix).not.toHaveBeenCalled();
+  expect(prxTasks.pushBranch).toHaveBeenCalled();
+  expect(prxTasks.createPR).toHaveBeenCalled();
+  expect(exitCode).toEqual(0);
+});
+
 test("when we call 'prx' with 'done' argument it executes the correct commands", () => {
-  const exitCode = prx("done", shelljs, prxTasks);
+  const exitCode = prx("done", [], shelljs, prxTasks);
 
   expect(prxTasks.pullLatest).toHaveBeenCalled();
   expect(prxTasks.deleteLocalBranch).toHaveBeenCalled();
@@ -54,7 +64,7 @@ test("when we call 'prx' with 'done' argument it executes the correct commands",
 });
 
 test("when we call 'prx' with 'doneDelete' argument it executes the correct commands", () => {
-  const exitCode = prx("doneDelete", shelljs, prxTasks);
+  const exitCode = prx("doneDelete", [], shelljs, prxTasks);
 
   expect(prxTasks.deleteRemoteBranch).toHaveBeenCalled();
   expect(prxTasks.pullLatest).toHaveBeenCalled();
@@ -67,7 +77,7 @@ test("when we call 'prx' on the main branch it fails", () => {
   gitUtils.getBranch = () => "main";
   prxTasks.checkBranchIsNotMain = prxTasksOriginal.checkBranchIsNotMain;
 
-  const exitCode = prx("start", shelljs, prxTasks);
+  const exitCode = prx("start", [], shelljs, prxTasks);
 
   expect(shelljs.echo).toHaveBeenCalledWith("ERROR: Cannot create a PR on branch 'main'.");
   expect(exitCode).toEqual(1);
@@ -78,14 +88,14 @@ test("when we call 'prx' with no commits on the personal branch it fails", () =>
   gitUtils.getCommitForBranch = () => "abcdef1";
   prxTasks.checkBranchHasCommits = prxTasksOriginal.checkBranchHasCommits;
 
-  const exitCode = prx("start", shelljs, prxTasks);
+  const exitCode = prx("start", [], shelljs, prxTasks);
 
   expect(shelljs.echo).toHaveBeenCalledWith(`ERROR: No commits on branch 'dummy-branch'. Did you forget to commit your files?`);
   expect(exitCode).toEqual(1);
 });
 
 test("when we call 'prx' with 'check-branch-name' argument it executes the correct commands", () => {
-  prx("check-branch-name", shelljs, prxTasks);
+  prx("check-branch-name", [], shelljs, prxTasks);
   expect(prxTasks.checkLengthOfBranchName).toHaveBeenCalled();
   expect(prxTasks.checkBranchNameStartsWithCorrectPrefix).toHaveBeenCalled();
 });
